@@ -1,0 +1,46 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo:/data/db
+  
+  rabbitmq:
+    image: "rabbitmq:3.8-management-alpine"
+    container_name: nodejs-rabbitmq-rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - "./.rabbitmq_data:/var/lib/rabbitmq/mnesia"
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics status || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: on-failure
+
+  api:
+    build: .
+    command: sh -c "sleep 5 && npm run start:api"
+    ports:
+      - "3001:3001"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  consumer:
+    build: .
+    command: sh -c "sleep 10 && npm run start:consumer"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+volumes:
+  mongo:

@@ -1,0 +1,30 @@
+{
+  "name": "testando",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start:api": "ts-node src/server.ts",
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "start:consumer": "ts-node src/consumer.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "amqplib": "^0.10.5",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.10.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.6",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.1",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
