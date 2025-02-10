@@ -1,7 +1,6 @@
 import axios, { AxiosInstance } from "axios"
 import { createCarDTO } from "../dto/car.dto";
 
-
 export class ApiExternalService {
 
     private client: AxiosInstance;
@@ -9,14 +8,15 @@ export class ApiExternalService {
     constructor(private baseURL: string) {
         this.client = axios.create({ baseURL });
     }
-    
-    async getCars(token: string): Promise<any>{
+
+    async getCars(token: string,ativo: boolean,pagina: string,tamanhoPagina: string): Promise<any>{
         
         try {
 
-            const response = await this.client.get("/v1/carro",{
+            const response = await this.client.get(`/v1/carro?ativo=${ativo}&pagina=${pagina}&tamanhoPagina=${tamanhoPagina}`,{
                 headers: { Authorization: token},
             });
+
             return response.data;
         } catch (error) {
             throw error;

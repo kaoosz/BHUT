@@ -29,15 +29,26 @@ export class ApiController {
 
     async getApiCar(req:Request, res: Response): Promise<void> {
         try {
+
+            const { ativo,pagina,tamanhoPagina } = req.query;
+
+            const pageNumber = (pagina as string);
+            const limitNumber = (tamanhoPagina as string);
+
             const token = req.headers.authorization;
+            const Active = ativo 
+            ? ativo.toString().toLowerCase() === "true" 
+            : true;
 
             if (!token) {
                 res.status(400).json({ error: "Token not provided." });
                 return;
             }
-            const car = await this.apiService.getCar(token);
+
+            const car = await this.apiService.getCar(token,Active,pageNumber,limitNumber);
             res.status(200).json(car);
         } catch (error:any) {
+            console.log(error);
             const status = error.response ? error.response.status : 500;
             const data = error.response ? error.response.data : { message: "Internal server error" };
             res.status(status).json(data);

@@ -17,18 +17,18 @@ export class ApiService {
     async create(createCarDto: createCarDTO,token: string): Promise<any>{
 
         const externalCall = await this.apiExternal.createCar(createCarDto,token);
-        // cade o retorno?
-        await this.rabbitmq.publisheInQueue(QUEUE,JSON.stringify({ // isso retorna true ou false se foi entregue apenas.
+
+        await this.rabbitmq.publisheInQueue(QUEUE,JSON.stringify({
             data_hora_criacao: new Date(),
             car_id: externalCall.id,
         }));
 
         return externalCall;
-
     }
 
-    async getCar(token: string): Promise<any>{
-        const externalCall = await this.apiExternal.getCars(token);
+    async getCar(token: string,ativo: boolean = true,pagina: string = "1",tamanhoPagina: string = "2"): Promise<any>{
+
+        const externalCall = await this.apiExternal.getCars(token,ativo,pagina,tamanhoPagina);
         return externalCall;
     }
 
